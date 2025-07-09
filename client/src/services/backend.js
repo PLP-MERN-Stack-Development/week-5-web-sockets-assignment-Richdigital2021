@@ -1,20 +1,25 @@
 import axios from "axios";
 import { io } from "socket.io-client";
 
+// Axios base API setup
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
 });
 
-// Create a socket connection
+// Socket connection
 export const socket = io("http://localhost:5000");
 
-// Fetch all rooms
+// ====================
+// 🧠 ROOM APIs
+// ====================
+
+// Get all rooms
 export const getRooms = async () => {
   try {
     const response = await api.get("/rooms");
     return response.data;
   } catch (error) {
-    console.error("Error fetching rooms:", error);
+    console.error("❌ Error fetching rooms:", error.message);
     throw error;
   }
 };
@@ -25,24 +30,48 @@ export const createRoom = async (roomName) => {
     const response = await api.post("/rooms", { name: roomName });
     return response.data;
   } catch (error) {
-    console.error("Error creating room:", error);
+    console.error("❌ Error creating room:", error.message);
     throw error;
   }
 };
 
-// Fetch messages (you already have this)
+// ====================
+// 💬 MESSAGE APIs
+// ====================
+
+// Get messages for a room
 export const getMessages = async (roomId) => {
-  const response = await api.get(`/messages/${roomId}`);
-  return response.data;
+  try {
+    const response = await api.get(`/messages/${roomId}`);
+    return response.data;
+  } catch (error) {
+    console.error("❌ Error fetching messages:", error.message);
+    throw error;
+  }
 };
 
-// Register user
+// ====================
+// 👤 AUTH APIs
+// ====================
+
+// Register a new user
 export const registerUser = async (username) => {
   try {
     const response = await api.post("/register", { username });
     return response.data;
   } catch (error) {
-    console.error("Error registering user:", error);
+    console.error("❌ Error registering user:", error.message);
+    throw error;
+  }
+};
+
+// Login user
+export const loginUser = async (username) => {
+  try {
+    const response = await api.post("/login", { username });
+    return response.data;
+  } catch (error) {
+    console.error("❌ Error logging in user:", error.message);
     throw error;
   }
 };

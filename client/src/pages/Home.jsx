@@ -28,6 +28,12 @@ export default function Home({ user }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (user?.username) {
+      socket.emit("user_join", user.username);
+    }
+  }, [user]);
+
   const fetchRooms = async () => {
     try {
       const roomsData = await getRooms(); // ✅ Correct: already returns data
